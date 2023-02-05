@@ -5,27 +5,32 @@ import { Button } from 'react-native-paper';
 import Card from '../components/Card';
 import colors from '../constants/colors';
 
-const GameScreen = ({UserNumber }) => {
+const GameScreen = ({UserNumber, setWasChose, setresult, result }) => {
     const [currentGuess, setCurrentGuess] = useState()
 
     useEffect(() => {
         setCurrentGuess(Math.floor(Math.random() * (99 - 1) + 1))
     }, [])
 
-    const verifyMayor = (currentGuess)=>{ currentGuess>UserNumber ? console.log('ganaste' ) : console.log('perdiste')}
-    const verifyMenor = (currentGuess)=>{ currentGuess<UserNumber ? console.log('ganaste' ) : console.log('perdiste')}
+    const DisplayEnd = (label)=> {
+        setresult (label);
+        setWasChose (true);
+    }
+    
+    const verify = (currentGuess, selection)=>{ (currentGuess>UserNumber && selection == "higher")||(currentGuess<UserNumber && selection == "lower") ? DisplayEnd("You are Winner") : DisplayEnd("You are Loser")}
+   
     
     
     return (
         <View style={styles.container}>
             <View style={styles.containerText}>
-            <Text style={styles.text}>Ud. supone que </Text>
+            <Text style={styles.text}>¿Ud. cree que </Text>
             <Text style={{...styles.text, ...styles.textNumber}}>{currentGuess}</Text>
-            <Text style={styles.text}>es Menor o Mayor que el número elegido</Text>
+            <Text style={styles.text}>es Menor o Mayor que el número elegido?</Text>
             </View>
             <Card NewStyles={styles.ButtonContainer}>
-                <Button icon="arrow-down-bold-circle"  mode="contained" style={{ ...styles.Button, ...styles.ButtonAcept }} onPress={()=>verifyMenor(currentGuess)}>menor</Button>
-                <Button icon="arrow-up-bold-circle" mode="contained" style={{ ...styles.Button, ...styles.ButtonAcept }} onPress={()=>verifyMayor(currentGuess)}>mayor</Button>
+                <Button icon="arrow-down-bold-circle"  mode="contained" style={{ ...styles.Button, ...styles.ButtonAcept }} onPress={()=>verify(currentGuess, "lower")}>menor</Button>
+                <Button icon="arrow-up-bold-circle" mode="contained" style={{ ...styles.Button, ...styles.ButtonAcept }} onPress={()=>verify(currentGuess, "higher")}>mayor</Button>
             </Card>
         </View>
     )

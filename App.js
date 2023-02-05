@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import GameEnd from './src/screens/GameEnd';
 import GameScreen from './src/screens/GameScreen';
 import Header from './src/components/Header';
 import StartGame from './src/screens/StartGame';
@@ -12,15 +13,19 @@ export default function App() {
   })
   const [UserNumber, setUserNumber] = useState('')
   const [wasChose, setWasChose]=useState (false)
+  const [result, setresult]=useState ("")
   
   const handleStartGame = (selectedNumber) => {setUserNumber( selectedNumber)}
   
-  let content = <StartGame UserNumber={UserNumber} onStartGame={handleStartGame}/>
-
+  const ReloadApp = () => {
+    setUserNumber(false);
+    setWasChose(false)
+  }
 
   
-  if (UserNumber){content = <GameScreen UserNumber={UserNumber} />}
-  if (wasChose){content = <GameEnd/>}
+  let content = <StartGame UserNumber={UserNumber} onStartGame={handleStartGame}/>
+  if (UserNumber){content = <GameScreen UserNumber={UserNumber} setWasChose={setWasChose} setresult={setresult} result={result}/>}
+  if (wasChose){content = <GameEnd result={result}  setUserNumber={setUserNumber} setWasChose={setWasChose} ReloadApp={ReloadApp} />}
 
   if (!loaded){return null}
   
